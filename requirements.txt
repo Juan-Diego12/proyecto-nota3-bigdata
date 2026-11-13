@@ -1,1 +1,5 @@
-
+# Python 3.11 + Java 17 (Temurin)
+pyspark==3.5.9
+pandas==3.0.6
+pyarrow==26.0.1
+psutil==7.2.2
