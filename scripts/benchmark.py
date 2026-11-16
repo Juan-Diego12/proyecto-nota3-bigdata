@@ -54,7 +54,7 @@ def medir(comando: list[str], log: Path, intervalo: float) -> dict[str, object]:
     inicio = time.perf_counter()
     ram_pico = 0
     muestras_cpu = []
-    inicializados: set[int] = set()
+    monitorizados: dict[int, psutil.Process] = {}
     nucleos = psutil.cpu_count(logical=True) or 1
 
     try:
@@ -76,15 +76,17 @@ def medir(comando: list[str], log: Path, intervalo: float) -> dict[str, object]:
                 for actual in arbol:
                     try:
                         rss += actual.memory_info().rss
-                        if actual.pid not in inicializados:
+                        if actual.pid not in monitorizados:
                             actual.cpu_percent(None)
-                            inicializados.add(actual.pid)
+                            monitorizados[actual.pid] = actual
                         else:
-                            cpu += actual.cpu_percent(None)
+                            # cpu_percent conserva la lectura anterior en el objeto Process.
+                            # Reutilizarlo es esencial para los hijos de Spark (java.exe).
+                            cpu += monitorizados[actual.pid].cpu_percent(None)
                     except (psutil.NoSuchProcess, psutil.AccessDenied):
                         continue
                 ram_pico = max(ram_pico, rss)
-                if inicializados:
+                if monitorizados:
                     # psutil entrega 100 % por nucleo; se normaliza a 0-100 % del equipo.
                     muestras_cpu.append(min(cpu / nucleos, 100.0))
 
