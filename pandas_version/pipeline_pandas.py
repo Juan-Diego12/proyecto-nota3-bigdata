@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import argparse
 import gc
-import shutil
+import os
 import time
 from pathlib import Path
 
@@ -252,13 +252,15 @@ def escribir(resultados: dict[str, pd.DataFrame], salida: str) -> None:
     destino.mkdir(parents=True, exist_ok=True)
     for nombre, df in resultados.items():
         carpeta_parquet = destino / nombre
-        if carpeta_parquet.exists():
-            if carpeta_parquet.is_dir():
-                shutil.rmtree(carpeta_parquet)
-            else:
-                carpeta_parquet.unlink()
-        carpeta_parquet.mkdir()
-        df.to_parquet(carpeta_parquet / "part-00000.parquet", index=False)
+        if carpeta_parquet.exists() and not carpeta_parquet.is_dir():
+            carpeta_parquet.unlink()
+        carpeta_parquet.mkdir(exist_ok=True)
+        archivo_parquet = carpeta_parquet / "part-00000.parquet"
+        temporal_parquet = carpeta_parquet / "part-00000.tmp.parquet"
+        # No se elimina la carpeta completa: OneDrive puede mantenerla bloqueada
+        # durante unos segundos. El reemplazo atomico del archivo evita WinError 5.
+        df.to_parquet(temporal_parquet, index=False)
+        os.replace(temporal_parquet, archivo_parquet)
 
         csv = df.copy()
         columnas_decimales = csv.select_dtypes(include=["floating"]).columns
