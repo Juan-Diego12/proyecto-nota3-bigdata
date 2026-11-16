@@ -1,0 +1,19 @@
+COMANDO: C:\Users\garci\AppData\Local\Programs\Python\Python311\python.exe spark_version/pipeline_spark.py --input C:\proyecto-nota3-bigdata\data\muestras\p01 --zones C:\proyecto-nota3-bigdata\data\taxi_zone_lookup.csv --output output\benchmark\spark_p01 --tmp C:\spark-tmp
+
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+26/11/16 13:48:12 WARN SparkConf: Note that spark.local.dir will be overridden by the value set by the cluster manager (via SPARK_LOCAL_DIRS in mesos/standalone/kubernetes and LOCAL_DIRS in YARN).
+26/11/16 13:48:13 WARN Utils: The configured local directories are not expected to be URIs; however, got suspicious values [C:/spark-tmp]. Please check your configured local directories.
+[Stage 0:>                                                          (0 + 1) / 1]                                                                                [Stage 3:>                                                         (0 + 8) / 15][Stage 3:===>                                                      (1 + 8) / 15][Stage 3:===============>                                          (4 + 8) / 15][Stage 3:=======================>                                  (6 + 8) / 15][Stage 3:===========================>                              (7 + 8) / 15][Stage 3:==================================>                       (9 + 6) / 15][Stage 3:=========================================>               (11 + 4) / 15][Stage 3:=====================================================>   (14 + 1) / 15][Stage 4:===================>                                      (5 + 8) / 15]                                                                                [Stage 32:==================================>                      (9 + 6) / 15]                                                                                API: df | cache: True | broadcast: True | particiones: 16 | memoria: 8g
+Archivos de viajes: 36 (agrupados en 2 lecturas por esquema)
+Calculando y escribiendo resultados...
+  r1: escrito en C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r1 y C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r1.csv
+  r2: escrito en C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r2 y C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r2.csv
+  r3: escrito en C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r3 y C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r3.csv
+Tiempo total: 21.1 s
+CORRECTO: el proceso con PID 22776 (proceso secundario de PID 1368)
+ha sido terminado.
+CORRECTO: el proceso con PID 1368 (proceso secundario de PID 15888)
+ha sido terminado.
+CORRECTO: el proceso con PID 15888 (proceso secundario de PID 2804)
+ha sido terminado.

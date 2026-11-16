@@ -1,6 +1,6 @@
-COMANDO: C:\Users\playa\OneDrive\Documentos\proyecto-nota3-bigdata\.venv\Scripts\python.exe pandas_version/pipeline_pandas.py --input D:\proyecto-nota3-datos\muestras\p01 --zones D:\proyecto-nota3-datos\taxi_zone_lookup.csv --output output\benchmark\pandas_p01 --modo completo
+COMANDO: C:\Users\garci\AppData\Local\Programs\Python\Python311\python.exe pandas_version/pipeline_pandas.py --input C:\proyecto-nota3-bigdata\data\muestras\p01 --zones C:\proyecto-nota3-bigdata\data\taxi_zone_lookup.csv --output output\benchmark\pandas_p01 --modo completo
 
-C:\Users\playa\OneDrive\Documentos\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py:92: Pandas4Warning: The copy keyword is deprecated and will be removed in a future version. Copy-on-Write is active in pandas since 3.0 which utilizes a lazy copy mechanism that defers copies until necessary. Use .copy() to make an eager copy if necessary.
+C:\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py:92: Pandas4Warning: The copy keyword is deprecated and will be removed in a future version. Copy-on-Write is active in pandas since 3.0 which utilizes a lazy copy mechanism that defers copies until necessary. Use .copy() to make an eager copy if necessary.
   return pd.concat(partes, ignore_index=True, copy=False)
 Modo: completo | archivos: 36
   Leyendo [ 1/36] yellow_tripdata_2022-01.parquet
@@ -44,4 +44,4 @@ Escribiendo resultados...
   r1: escrito en output\benchmark\pandas_p01\r1 y output\benchmark\pandas_p01\r1.csv
   r2: escrito en output\benchmark\pandas_p01\r2 y output\benchmark\pandas_p01\r2.csv
   r3: escrito en output\benchmark\pandas_p01\r3 y output\benchmark\pandas_p01\r3.csv
-Tiempo total: 1.7 s
+Tiempo total: 2.0 s

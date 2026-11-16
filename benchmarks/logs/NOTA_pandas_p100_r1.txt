@@ -1,0 +1,1 @@
+﻿El log original de pandas_p100_r1 fue sobrescrito por una corrida adicional hecha solo para tomar capturas del Administrador de tareas (interrumpida manualmente con Ctrl+C). El resultado oficial de esa repeticion (528.01 s, 11444.8 MB) esta en benchmarks/resultados.csv.

@@ -1,19 +1,19 @@
-COMANDO: C:\Users\playa\OneDrive\Documentos\proyecto-nota3-bigdata\.venv\Scripts\python.exe spark_version/pipeline_spark.py --input D:\proyecto-nota3-datos\muestras\p01 --zones D:\proyecto-nota3-datos\taxi_zone_lookup.csv --output output\benchmark\spark_p01 --tmp D:\spark-tmp
+COMANDO: C:\Users\garci\AppData\Local\Programs\Python\Python311\python.exe spark_version/pipeline_spark.py --input C:\proyecto-nota3-bigdata\data\muestras\p01 --zones C:\proyecto-nota3-bigdata\data\taxi_zone_lookup.csv --output output\benchmark\spark_p01 --tmp C:\spark-tmp
 
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-26/11/16 12:45:43 WARN SparkConf: Note that spark.local.dir will be overridden by the value set by the cluster manager (via SPARK_LOCAL_DIRS in mesos/standalone/kubernetes and LOCAL_DIRS in YARN).
-26/11/16 12:45:44 WARN Utils: The configured local directories are not expected to be URIs; however, got suspicious values [D:/spark-tmp]. Please check your configured local directories.
-[Stage 3:>                                                        (0 + 12) / 25][Stage 3:===============>                                         (7 + 12) / 25][Stage 3:====================>                                    (9 + 13) / 25][Stage 3:=============================>                          (13 + 12) / 25][Stage 3:===============================================>         (21 + 4) / 25]                                                                                API: df | cache: True | broadcast: True | particiones: 16 | memoria: 8g
+26/11/16 13:47:46 WARN SparkConf: Note that spark.local.dir will be overridden by the value set by the cluster manager (via SPARK_LOCAL_DIRS in mesos/standalone/kubernetes and LOCAL_DIRS in YARN).
+26/11/16 13:47:47 WARN Utils: The configured local directories are not expected to be URIs; however, got suspicious values [C:/spark-tmp]. Please check your configured local directories.
+[Stage 0:>                                                          (0 + 1) / 1]                                                                                [Stage 3:>                                                         (0 + 8) / 15][Stage 3:===>                                                      (1 + 8) / 15][Stage 3:===========>                                              (3 + 8) / 15][Stage 3:===============>                                          (4 + 8) / 15][Stage 3:===================>                                      (5 + 8) / 15][Stage 3:===========================>                              (7 + 8) / 15][Stage 3:==============================>                           (8 + 7) / 15][Stage 3:======================================>                  (10 + 5) / 15][Stage 3:=====================================================>   (14 + 1) / 15][Stage 4:>                                                         (0 + 8) / 15][Stage 4:=======================>                                  (6 + 8) / 15]                                                                                [Stage 18:=====================================>                  (10 + 5) / 15]                                                                                [Stage 32:============================================>           (12 + 3) / 15]                                                                                API: df | cache: True | broadcast: True | particiones: 16 | memoria: 8g
 Archivos de viajes: 36 (agrupados en 2 lecturas por esquema)
 Calculando y escribiendo resultados...
-  r1: escrito en C:\Users\playa\OneDrive\Documentos\proyecto-nota3-bigdata\output\benchmark\spark_p01\r1 y C:\Users\playa\OneDrive\Documentos\proyecto-nota3-bigdata\output\benchmark\spark_p01\r1.csv
-  r2: escrito en C:\Users\playa\OneDrive\Documentos\proyecto-nota3-bigdata\output\benchmark\spark_p01\r2 y C:\Users\playa\OneDrive\Documentos\proyecto-nota3-bigdata\output\benchmark\spark_p01\r2.csv
-  r3: escrito en C:\Users\playa\OneDrive\Documentos\proyecto-nota3-bigdata\output\benchmark\spark_p01\r3 y C:\Users\playa\OneDrive\Documentos\proyecto-nota3-bigdata\output\benchmark\spark_p01\r3.csv
-Tiempo total: 13.8 s
-CORRECTO: el proceso con PID 2312 (proceso secundario de PID 4392)
+  r1: escrito en C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r1 y C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r1.csv
+  r2: escrito en C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r2 y C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r2.csv
+  r3: escrito en C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r3 y C:\proyecto-nota3-bigdata\output\benchmark\spark_p01\r3.csv
+Tiempo total: 25.2 s
+CORRECTO: el proceso con PID 10260 (proceso secundario de PID 14412)
 ha sido terminado.
-CORRECTO: el proceso con PID 4392 (proceso secundario de PID 8992)
+CORRECTO: el proceso con PID 14412 (proceso secundario de PID 17792)
 ha sido terminado.
-CORRECTO: el proceso con PID 8992 (proceso secundario de PID 14388)
+CORRECTO: el proceso con PID 17792 (proceso secundario de PID 23888)
 ha sido terminado.

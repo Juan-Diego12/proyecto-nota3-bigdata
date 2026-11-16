@@ -1,0 +1,77 @@
+COMANDO: C:\Users\garci\AppData\Local\Programs\Python\Python311\python.exe pandas_version/pipeline_pandas.py --input C:\proyecto-nota3-bigdata\data\raw --zones C:\proyecto-nota3-bigdata\data\taxi_zone_lookup.csv --output output\benchmark\pandas_p100 --modo completo
+
+C:\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py:92: Pandas4Warning: The copy keyword is deprecated and will be removed in a future version. Copy-on-Write is active in pandas since 3.0 which utilizes a lazy copy mechanism that defers copies until necessary. Use .copy() to make an eager copy if necessary.
+  return pd.concat(partes, ignore_index=True, copy=False)
+Modo: completo | archivos: 36
+  Leyendo [ 1/36] yellow_tripdata_2022-01.parquet
+  Leyendo [ 2/36] yellow_tripdata_2022-02.parquet
+  Leyendo [ 3/36] yellow_tripdata_2022-03.parquet
+  Leyendo [ 4/36] yellow_tripdata_2022-04.parquet
+  Leyendo [ 5/36] yellow_tripdata_2022-05.parquet
+  Leyendo [ 6/36] yellow_tripdata_2022-06.parquet
+  Leyendo [ 7/36] yellow_tripdata_2022-07.parquet
+  Leyendo [ 8/36] yellow_tripdata_2022-08.parquet
+  Leyendo [ 9/36] yellow_tripdata_2022-09.parquet
+  Leyendo [10/36] yellow_tripdata_2022-10.parquet
+  Leyendo [11/36] yellow_tripdata_2022-11.parquet
+  Leyendo [12/36] yellow_tripdata_2022-12.parquet
+  Leyendo [13/36] yellow_tripdata_2023-01.parquet
+  Leyendo [14/36] yellow_tripdata_2023-02.parquet
+  Leyendo [15/36] yellow_tripdata_2023-03.parquet
+  Leyendo [16/36] yellow_tripdata_2023-04.parquet
+  Leyendo [17/36] yellow_tripdata_2023-05.parquet
+  Leyendo [18/36] yellow_tripdata_2023-06.parquet
+  Leyendo [19/36] yellow_tripdata_2023-07.parquet
+  Leyendo [20/36] yellow_tripdata_2023-08.parquet
+  Leyendo [21/36] yellow_tripdata_2023-09.parquet
+  Leyendo [22/36] yellow_tripdata_2023-10.parquet
+  Leyendo [23/36] yellow_tripdata_2023-11.parquet
+  Leyendo [24/36] yellow_tripdata_2023-12.parquet
+  Leyendo [25/36] yellow_tripdata_2024-01.parquet
+  Leyendo [26/36] yellow_tripdata_2024-02.parquet
+  Leyendo [27/36] yellow_tripdata_2024-03.parquet
+  Leyendo [28/36] yellow_tripdata_2024-04.parquet
+  Leyendo [29/36] yellow_tripdata_2024-05.parquet
+  Leyendo [30/36] yellow_tripdata_2024-06.parquet
+  Leyendo [31/36] yellow_tripdata_2024-07.parquet
+  Leyendo [32/36] yellow_tripdata_2024-08.parquet
+  Leyendo [33/36] yellow_tripdata_2024-09.parquet
+  Leyendo [34/36] yellow_tripdata_2024-10.parquet
+  Leyendo [35/36] yellow_tripdata_2024-11.parquet
+  Leyendo [36/36] yellow_tripdata_2024-12.parquet
+Filas leidas: 119,136,044
+Traceback (most recent call last):
+  File "C:\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py", line 306, in <module>
+    main()
+  File "C:\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py", line 295, in main
+    base = limpiar_transformar_unir(viajes, zonas)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py", line 124, in limpiar_transformar_unir
+    df = df.loc[mascara].copy()
+         ~~~~~~^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\indexing.py", line 1207, in __getitem__
+    return self._getitem_axis(maybe_callable, axis=axis)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\indexing.py", line 1431, in _getitem_axis
+    return self._getbool_axis(key, axis=axis)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\indexing.py", line 1227, in _getbool_axis
+    return self.obj.take(inds, axis=axis)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\generic.py", line 4089, in take
+    new_data = self._mgr.take(
+               ^^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\internals\managers.py", line 1090, in take
+    return self.reindex_indexer(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\internals\managers.py", line 879, in reindex_indexer
+    blk.take_nd(
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\internals\blocks.py", line 1015, in take_nd
+    new_values = algos.take_nd(
+                 ^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\array_algos\take.py", line 115, in take_nd
+    return _take_nd_ndarray(arr, indexer, axis, fill_value, allow_fill)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\array_algos\take.py", line 160, in _take_nd_ndarray
+    func(arr, indexer, out, fill_value)
+KeyboardInterrupt
