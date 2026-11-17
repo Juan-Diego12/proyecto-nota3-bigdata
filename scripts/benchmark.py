@@ -36,6 +36,7 @@ def entradas(datos: Path) -> dict[int, Path]:
         10: datos / "muestras" / "p10",
         50: datos / "muestras" / "p50",
         100: datos / "raw",
+        200: datos / "x2",  # conjunto completo replicado dos veces (scripts/replicar_datos.py)
     }
 
 
@@ -49,13 +50,23 @@ def procesos_vivos(raiz: psutil.Process) -> list[psutil.Process]:
     return procesos
 
 
-def medir(comando: list[str], log: Path, intervalo: float) -> dict[str, object]:
+def terminar_arbol(raiz: psutil.Process) -> None:
+    """Termina el proceso y todos sus hijos (incluido java.exe de Spark)."""
+    for proc in procesos_vivos(raiz)[::-1]:
+        try:
+            proc.kill()
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            pass
+
+
+def medir(comando: list[str], log: Path, intervalo: float, limite: float | None = None) -> dict[str, object]:
     log.parent.mkdir(parents=True, exist_ok=True)
     inicio = time.perf_counter()
     ram_pico = 0
     muestras_cpu = []
     monitorizados: dict[int, psutil.Process] = {}
     nucleos = psutil.cpu_count(logical=True) or 1
+    excedido = False
 
     try:
         with log.open("w", encoding="utf-8", errors="replace") as salida:
@@ -92,6 +103,11 @@ def medir(comando: list[str], log: Path, intervalo: float) -> dict[str, object]:
 
                 if proceso.poll() is not None:
                     break
+                if limite and time.perf_counter() - inicio > limite:
+                    # Se considera inviable: se detiene para no dejar el equipo bloqueado.
+                    excedido = True
+                    terminar_arbol(raiz)
+                    break
                 time.sleep(intervalo)
 
             codigo = proceso.wait()
@@ -105,7 +121,10 @@ def medir(comando: list[str], log: Path, intervalo: float) -> dict[str, object]:
         }
 
     detalle = ""
-    if codigo != 0:
+    if excedido:
+        detalle = f"Tiempo limite excedido ({limite:.0f} s): ejecucion detenida"
+        codigo = codigo if codigo not in (0, None) else -1
+    elif codigo != 0:
         try:
             lineas = [linea.strip() for linea in log.read_text(encoding="utf-8").splitlines() if linea.strip()]
             detalle = " | ".join(lineas[-3:])[-1000:]
@@ -189,6 +208,8 @@ def main() -> None:
     parser.add_argument("--modo-pandas", choices=["completo", "archivos"], default="completo")
     parser.add_argument("--intervalo", type=float, default=0.5)
     parser.add_argument("--python", default=sys.executable)
+    parser.add_argument("--limite-s", type=float, default=None,
+                        help="Tiempo maximo por ejecucion en segundos; si se supera, se detiene y se marca como error")
     parser.add_argument("--reiniciar", action="store_true", help="Repetir claves que ya existen")
     args = parser.parse_args()
 
@@ -232,7 +253,7 @@ def main() -> None:
                     args.modo_pandas,
                 )
                 print(f"[{actual}/{total}] {herramienta} {porcentaje} % repeticion {repeticion}")
-                medicion = medir(comando, log, args.intervalo)
+                medicion = medir(comando, log, args.intervalo, args.limite_s)
                 ok = medicion["codigo"] == 0
                 fila = {
                     "herramienta": herramienta,

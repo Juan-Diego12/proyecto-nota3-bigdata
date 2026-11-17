@@ -56,7 +56,7 @@ ALIAS = {
     "error": "detalle", "mensaje": "detalle",
 }
 
-PORCENTAJES = [1, 10, 50, 100]
+PORCENTAJES = [1, 10, 50, 100]  # se amplia en main() con los porcentajes presentes (ej. 200)
 COLOR = {"pandas": "#2a78d6", "Spark": "#eb6834"}  # paleta validada (contraste y daltonismo)
 MARCA = {"pandas": "o", "Spark": "s"}
 LINEA = {"pandas": "-", "Spark": "--"}
@@ -136,6 +136,7 @@ def filas_por_porcentaje(ruta_resumen: Path) -> dict:
     filas = r.groupby("porcentaje")["filas_muestra"].sum().to_dict()
     primera = r["porcentaje"].iloc[0]
     filas[100] = int(r.loc[r["porcentaje"] == primera, "filas_originales"].sum())
+    filas[200] = 2 * filas[100]  # conjunto replicado dos veces (scripts/replicar_datos.py)
     return {int(k): int(v) for k, v in filas.items()}
 
 
@@ -209,6 +210,17 @@ def etiquetas_x(filas: dict) -> list:
     return out
 
 
+def error_corto(texto: str) -> str:
+    """Resume el detalle del error para las etiquetas de las graficas."""
+    t = str(texto or "")
+    m = re.search(r"limite excedido \((\d+) s\)", t, flags=re.I)
+    if m:
+        return f"no terminó: más de {int(m.group(1)) // 60} min"
+    if "memoryerror" in t.lower():
+        return "MemoryError"
+    return (t[:40] + "…") if len(t) > 40 else (t or "error")
+
+
 def coma_decimal(ax, eje="y") -> None:
     """Numeros de los ejes con coma decimal, como en el resto del informe."""
     fmt = matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}".replace(".", ","))
@@ -253,12 +265,12 @@ def grafica_por_volumen(res, filas, columna, desv, escala, eje_y, titulo, archiv
                 continue
             y = (techo or 1) * 1.08
             ax.scatter([x_pos[p]], [y], marker="x", s=90, color=COLOR[herr], linewidths=2.5, zorder=4)
-            ax.annotate(f"{herr}: falló\n({r['error'] or 'error'})", (x_pos[p], y),
+            ax.annotate(f"{herr}: falló\n({error_corto(r['error'])})", (x_pos[p], y),
                         textcoords="offset points", xytext=(0, 10), ha="center", fontsize=8.5)
         if incluir_fallidas:
             for p, r in fallidas.iterrows():
                 if p in x_pos and pd.notna(r[columna]):
-                    ax.annotate(f"falló ({r['error'] or 'error'})", (x_pos[p], r[columna] * escala),
+                    ax.annotate(f"{herr}: falló\n({error_corto(r['error'])})", (x_pos[p], r[columna] * escala),
                                 textcoords="offset points", xytext=(0, -14), ha="center", va="top",
                                 fontsize=8.5)
 
@@ -407,6 +419,8 @@ def main() -> None:
 
     filas = filas_por_porcentaje(Path(args.muestras))
     df = leer_mediciones(resultados)
+    global PORCENTAJES
+    PORCENTAJES = sorted(set(PORCENTAJES) | set(int(p) for p in df["porcentaje"].unique()))
     res = resumir(df, filas)
     print(f"Mediciones leidas: {len(df)} ejecuciones ({df['ok'].sum()} exitosas)")
 
