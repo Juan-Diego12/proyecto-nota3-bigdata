@@ -222,7 +222,7 @@ def marca_ejemplo(fig, ejemplo: bool) -> None:
 
 
 def grafica_por_volumen(res, filas, columna, desv, escala, eje_y, titulo, archivo, ejemplo,
-                        linea_ref=None, texto_ref=None, incluir_fallidas=False):
+                        linea_ref=None, texto_ref=None, incluir_fallidas=False, extras=None):
     fig, ax = plt.subplots(figsize=(7.2, 4.2))
     x_pos = {p: i for i, p in enumerate(PORCENTAJES)}
     techo = 0
@@ -261,6 +261,19 @@ def grafica_por_volumen(res, filas, columna, desv, escala, eje_y, titulo, archiv
                     ax.annotate(f"falló ({r['error'] or 'error'})", (x_pos[p], r[columna] * escala),
                                 textcoords="offset points", xytext=(0, -14), ha="center", va="top",
                                 fontsize=8.5)
+
+    # Puntos adicionales, ej. memoria comprometida de pandas (incluye lo paginado a disco),
+    # que la memoria residente medida con psutil no refleja.
+    for herr, pct, valor, texto in (extras or []):
+        if pct not in x_pos:
+            continue
+        ax.scatter([x_pos[pct]], [valor], marker=MARCA[herr], s=70, facecolors="white",
+                   edgecolors=COLOR[herr], linewidths=2, zorder=4)
+        ax.plot([x_pos[pct], x_pos[pct]], [res[(res["herramienta"] == herr) & (res["porcentaje"] == pct)][columna].max() * escala, valor],
+                color=COLOR[herr], linestyle=":", linewidth=1.5, zorder=2)
+        ax.annotate(texto, (x_pos[pct], valor), textcoords="offset points", xytext=(-10, 0),
+                    ha="right", va="center", fontsize=8.5)
+        techo = max(techo, valor)
 
     if linea_ref is not None:
         ax.axhline(linea_ref, color=GRIS, linestyle=":", linewidth=1.5, zorder=2)
@@ -375,6 +388,8 @@ def main() -> None:
     parser.add_argument("--optimizaciones", default="benchmarks/optimizaciones_p10.txt")
     parser.add_argument("--ram-total-gb", type=float, default=15.8,
                         help="RAM utilizable del equipo de prueba (linea de referencia)")
+    parser.add_argument("--pandas-comprometida-gb", type=float, default=None,
+                        help="Memoria comprometida de pandas al 100 %% (RAM + paginacion), en GB")
     parser.add_argument("--ejemplo", action="store_true", help="Probar con datos inventados")
     args = parser.parse_args()
 
@@ -401,12 +416,15 @@ def main() -> None:
     grafica_por_volumen(res, filas, "tiempo_prom_s", "tiempo_desv_s", 1, "Tiempo de ejecución (s)",
                         "Tiempo de ejecución según el volumen de datos (promedio de 3 repeticiones)",
                         salida / "tiempo_vs_volumen.png", args.ejemplo)
-    grafica_por_volumen(res, filas, "ram_pico_max_mb", None, 1 / 1024, "RAM pico (GB)",
-                        "Memoria RAM pico según el volumen de datos",
+    grafica_por_volumen(res, filas, "ram_pico_max_mb", None, 1 / 1024, "Memoria (GB)",
+                        "Memoria RAM pico (residente) según el volumen de datos",
                         salida / "memoria_vs_volumen.png", args.ejemplo,
                         linea_ref=args.ram_total_gb,
                         texto_ref=f"RAM utilizable del equipo: {args.ram_total_gb:g} GB".replace(".", ","),
-                        incluir_fallidas=True)
+                        incluir_fallidas=True,
+                        extras=[("pandas", 100, args.pandas_comprometida_gb,
+                                 f"pandas: {args.pandas_comprometida_gb:g} GB de memoria\ncomprometida (incluye paginación)".replace(".", ","))]
+                        if args.pandas_comprometida_gb else None)
     generadas = ["tiempo_vs_volumen.png", "memoria_vs_volumen.png"]
     if "cpu_prom_pct" in res and res["cpu_prom_pct"].notna().any():
         grafica_por_volumen(res, filas, "cpu_prom_pct", None, 1, "CPU promedio (%)",
