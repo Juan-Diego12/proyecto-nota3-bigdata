@@ -348,7 +348,7 @@ python scripts\benchmark.py `
     --repeticiones 1 `
     --herramientas pandas spark `
     --tmp-spark D:\spark-tmp `
-    --resultados benchmarks\prueba_resultados.csv
+    --resultados output\prueba_resultados.csv
 ```
 
 Medición oficial en un único equipo:

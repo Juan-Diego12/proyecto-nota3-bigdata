@@ -389,7 +389,7 @@ def main() -> None:
     parser.add_argument("--ram-total-gb", type=float, default=15.8,
                         help="RAM utilizable del equipo de prueba (linea de referencia)")
     parser.add_argument("--pandas-comprometida-gb", type=float, default=None,
-                        help="Memoria comprometida de pandas al 100 %% (RAM + paginacion), en GB")
+                        help="Memoria comprometida del sistema durante pandas al 100 %% (RAM + paginacion), en GB")
     parser.add_argument("--ejemplo", action="store_true", help="Probar con datos inventados")
     args = parser.parse_args()
 
@@ -423,7 +423,7 @@ def main() -> None:
                         texto_ref=f"RAM utilizable del equipo: {args.ram_total_gb:g} GB".replace(".", ","),
                         incluir_fallidas=True,
                         extras=[("pandas", 100, args.pandas_comprometida_gb,
-                                 f"pandas: {args.pandas_comprometida_gb:g} GB de memoria\ncomprometida (incluye paginación)".replace(".", ","))]
+                                 f"Memoria comprometida del sistema durante\npandas: {args.pandas_comprometida_gb:g} GB (incluye paginación)".replace(".", ","))]
                         if args.pandas_comprometida_gb else None)
     generadas = ["tiempo_vs_volumen.png", "memoria_vs_volumen.png"]
     if "cpu_prom_pct" in res and res["cpu_prom_pct"].notna().any():
