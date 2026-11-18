@@ -1,2 +1,4 @@
 herramienta,porcentaje,repeticion,tiempo_s,ram_pico_mb,estado,cpu_promedio,detalle
-pandas,100,1,197.611,1532.3,ok,12.3,
+pandas,100,1,93.901,1610.7,ok,14.3,
+pandas,100,2,108.689,1581.3,ok,14.5,
+pandas,100,3,120.149,1568.7,ok,14.3,

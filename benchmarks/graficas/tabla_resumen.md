@@ -8,3 +8,5 @@
 | 50 % | 59.568.023 | pandas | 3/3 | 173,8 | 51,7 | 11,00 | — |
 | 100 % | 119.136.044 | Spark | 3/3 | 210,9 | 23,4 | 8,66 | 2,45 x |
 | 100 % | 119.136.044 | pandas | 3/3 | 516,8 | 14,2 | 11,43 | — |
+| 200 % | 238.272.088 | Spark | 3/3 | 322,2 | 9,3 | 8,72 | — |
+| 200 % | 238.272.088 | pandas | 0/3 | Falló (new_values = new_values[argsort] | ~~~~~~~~~~^^^^^^^^^ | numpy._core._exceptions._ArrayMemoryError: Unable to allocate 6.70 GiB for an array with shape (4, 224734306) and data type float64) | — | 11,54 | — |

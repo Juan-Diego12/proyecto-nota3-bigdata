@@ -1,0 +1,44 @@
+COMANDO: C:\Users\garci\AppData\Local\Programs\Python\Python311\python.exe pandas_version/pipeline_pandas.py --input C:\proyecto-nota3-bigdata\data\raw --zones C:\proyecto-nota3-bigdata\data\taxi_zone_lookup.csv --output output\benchmark\pandas_p100 --modo archivos
+
+Modo: archivos | archivos: 36
+  Procesando [ 1/36] yellow_tripdata_2022-01.parquet
+  Procesando [ 2/36] yellow_tripdata_2022-02.parquet
+  Procesando [ 3/36] yellow_tripdata_2022-03.parquet
+  Procesando [ 4/36] yellow_tripdata_2022-04.parquet
+  Procesando [ 5/36] yellow_tripdata_2022-05.parquet
+  Procesando [ 6/36] yellow_tripdata_2022-06.parquet
+  Procesando [ 7/36] yellow_tripdata_2022-07.parquet
+  Procesando [ 8/36] yellow_tripdata_2022-08.parquet
+  Procesando [ 9/36] yellow_tripdata_2022-09.parquet
+  Procesando [10/36] yellow_tripdata_2022-10.parquet
+  Procesando [11/36] yellow_tripdata_2022-11.parquet
+  Procesando [12/36] yellow_tripdata_2022-12.parquet
+  Procesando [13/36] yellow_tripdata_2023-01.parquet
+  Procesando [14/36] yellow_tripdata_2023-02.parquet
+  Procesando [15/36] yellow_tripdata_2023-03.parquet
+  Procesando [16/36] yellow_tripdata_2023-04.parquet
+  Procesando [17/36] yellow_tripdata_2023-05.parquet
+  Procesando [18/36] yellow_tripdata_2023-06.parquet
+  Procesando [19/36] yellow_tripdata_2023-07.parquet
+  Procesando [20/36] yellow_tripdata_2023-08.parquet
+  Procesando [21/36] yellow_tripdata_2023-09.parquet
+  Procesando [22/36] yellow_tripdata_2023-10.parquet
+  Procesando [23/36] yellow_tripdata_2023-11.parquet
+  Procesando [24/36] yellow_tripdata_2023-12.parquet
+  Procesando [25/36] yellow_tripdata_2024-01.parquet
+  Procesando [26/36] yellow_tripdata_2024-02.parquet
+  Procesando [27/36] yellow_tripdata_2024-03.parquet
+  Procesando [28/36] yellow_tripdata_2024-04.parquet
+  Procesando [29/36] yellow_tripdata_2024-05.parquet
+  Procesando [30/36] yellow_tripdata_2024-06.parquet
+  Procesando [31/36] yellow_tripdata_2024-07.parquet
+  Procesando [32/36] yellow_tripdata_2024-08.parquet
+  Procesando [33/36] yellow_tripdata_2024-09.parquet
+  Procesando [34/36] yellow_tripdata_2024-10.parquet
+  Procesando [35/36] yellow_tripdata_2024-11.parquet
+  Procesando [36/36] yellow_tripdata_2024-12.parquet
+Escribiendo resultados...
+  r1: escrito en output\benchmark\pandas_p100\r1 y output\benchmark\pandas_p100\r1.csv
+  r2: escrito en output\benchmark\pandas_p100\r2 y output\benchmark\pandas_p100\r2.csv
+  r3: escrito en output\benchmark\pandas_p100\r3 y output\benchmark\pandas_p100\r3.csv
+Tiempo total: 107.9 s

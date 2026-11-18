@@ -1,0 +1,9 @@
+﻿
+
+Name              : C:\pagefile.sys
+AllocatedBaseSize : 42371
+CurrentUsage      : 1585
+PeakUsage         : 33266
+
+
+

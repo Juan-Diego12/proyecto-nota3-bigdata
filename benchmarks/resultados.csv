@@ -23,3 +23,9 @@ spark,50,3,109.771,6651.0,ok,64.8,
 spark,100,1,236.082,8775.4,ok,63.7,
 spark,100,2,206.584,8841.2,ok,68.8,
 spark,100,3,189.892,8870.1,ok,72.9,
+spark,200,1,311.432,8928.4,ok,79.5,
+spark,200,2,327.988,8901.2,ok,81.5,
+spark,200,3,327.081,8918.3,ok,83.8,
+pandas,200,1,482.008,11264.9,error,8.0,"new_values = new_values[argsort] | ~~~~~~~~~~^^^^^^^^^ | numpy._core._exceptions._ArrayMemoryError: Unable to allocate 6.70 GiB for an array with shape (4, 224734306) and data type float64"
+pandas,200,2,477.148,11471.0,error,7.3,"new_values = new_values[argsort] | ~~~~~~~~~~^^^^^^^^^ | numpy._core._exceptions._ArrayMemoryError: Unable to allocate 6.70 GiB for an array with shape (4, 224734306) and data type float64"
+pandas,200,3,481.163,11816.1,error,7.4,"new_values = new_values[argsort] | ~~~~~~~~~~^^^^^^^^^ | numpy._core._exceptions._ArrayMemoryError: Unable to allocate 6.70 GiB for an array with shape (4, 224734306) and data type float64"

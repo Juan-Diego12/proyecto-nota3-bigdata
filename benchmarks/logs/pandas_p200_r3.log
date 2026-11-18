@@ -1,0 +1,102 @@
+COMANDO: C:\Users\garci\AppData\Local\Programs\Python\Python311\python.exe pandas_version/pipeline_pandas.py --input C:\proyecto-nota3-bigdata\data\x2 --zones C:\proyecto-nota3-bigdata\data\taxi_zone_lookup.csv --output output\benchmark\pandas_p200 --modo completo
+
+C:\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py:92: Pandas4Warning: The copy keyword is deprecated and will be removed in a future version. Copy-on-Write is active in pandas since 3.0 which utilizes a lazy copy mechanism that defers copies until necessary. Use .copy() to make an eager copy if necessary.
+  return pd.concat(partes, ignore_index=True, copy=False)
+Modo: completo | archivos: 72
+  Leyendo [ 1/72] yellow_tripdata_2022-01_c1.parquet
+  Leyendo [ 2/72] yellow_tripdata_2022-01_c2.parquet
+  Leyendo [ 3/72] yellow_tripdata_2022-02_c1.parquet
+  Leyendo [ 4/72] yellow_tripdata_2022-02_c2.parquet
+  Leyendo [ 5/72] yellow_tripdata_2022-03_c1.parquet
+  Leyendo [ 6/72] yellow_tripdata_2022-03_c2.parquet
+  Leyendo [ 7/72] yellow_tripdata_2022-04_c1.parquet
+  Leyendo [ 8/72] yellow_tripdata_2022-04_c2.parquet
+  Leyendo [ 9/72] yellow_tripdata_2022-05_c1.parquet
+  Leyendo [10/72] yellow_tripdata_2022-05_c2.parquet
+  Leyendo [11/72] yellow_tripdata_2022-06_c1.parquet
+  Leyendo [12/72] yellow_tripdata_2022-06_c2.parquet
+  Leyendo [13/72] yellow_tripdata_2022-07_c1.parquet
+  Leyendo [14/72] yellow_tripdata_2022-07_c2.parquet
+  Leyendo [15/72] yellow_tripdata_2022-08_c1.parquet
+  Leyendo [16/72] yellow_tripdata_2022-08_c2.parquet
+  Leyendo [17/72] yellow_tripdata_2022-09_c1.parquet
+  Leyendo [18/72] yellow_tripdata_2022-09_c2.parquet
+  Leyendo [19/72] yellow_tripdata_2022-10_c1.parquet
+  Leyendo [20/72] yellow_tripdata_2022-10_c2.parquet
+  Leyendo [21/72] yellow_tripdata_2022-11_c1.parquet
+  Leyendo [22/72] yellow_tripdata_2022-11_c2.parquet
+  Leyendo [23/72] yellow_tripdata_2022-12_c1.parquet
+  Leyendo [24/72] yellow_tripdata_2022-12_c2.parquet
+  Leyendo [25/72] yellow_tripdata_2023-01_c1.parquet
+  Leyendo [26/72] yellow_tripdata_2023-01_c2.parquet
+  Leyendo [27/72] yellow_tripdata_2023-02_c1.parquet
+  Leyendo [28/72] yellow_tripdata_2023-02_c2.parquet
+  Leyendo [29/72] yellow_tripdata_2023-03_c1.parquet
+  Leyendo [30/72] yellow_tripdata_2023-03_c2.parquet
+  Leyendo [31/72] yellow_tripdata_2023-04_c1.parquet
+  Leyendo [32/72] yellow_tripdata_2023-04_c2.parquet
+  Leyendo [33/72] yellow_tripdata_2023-05_c1.parquet
+  Leyendo [34/72] yellow_tripdata_2023-05_c2.parquet
+  Leyendo [35/72] yellow_tripdata_2023-06_c1.parquet
+  Leyendo [36/72] yellow_tripdata_2023-06_c2.parquet
+  Leyendo [37/72] yellow_tripdata_2023-07_c1.parquet
+  Leyendo [38/72] yellow_tripdata_2023-07_c2.parquet
+  Leyendo [39/72] yellow_tripdata_2023-08_c1.parquet
+  Leyendo [40/72] yellow_tripdata_2023-08_c2.parquet
+  Leyendo [41/72] yellow_tripdata_2023-09_c1.parquet
+  Leyendo [42/72] yellow_tripdata_2023-09_c2.parquet
+  Leyendo [43/72] yellow_tripdata_2023-10_c1.parquet
+  Leyendo [44/72] yellow_tripdata_2023-10_c2.parquet
+  Leyendo [45/72] yellow_tripdata_2023-11_c1.parquet
+  Leyendo [46/72] yellow_tripdata_2023-11_c2.parquet
+  Leyendo [47/72] yellow_tripdata_2023-12_c1.parquet
+  Leyendo [48/72] yellow_tripdata_2023-12_c2.parquet
+  Leyendo [49/72] yellow_tripdata_2024-01_c1.parquet
+  Leyendo [50/72] yellow_tripdata_2024-01_c2.parquet
+  Leyendo [51/72] yellow_tripdata_2024-02_c1.parquet
+  Leyendo [52/72] yellow_tripdata_2024-02_c2.parquet
+  Leyendo [53/72] yellow_tripdata_2024-03_c1.parquet
+  Leyendo [54/72] yellow_tripdata_2024-03_c2.parquet
+  Leyendo [55/72] yellow_tripdata_2024-04_c1.parquet
+  Leyendo [56/72] yellow_tripdata_2024-04_c2.parquet
+  Leyendo [57/72] yellow_tripdata_2024-05_c1.parquet
+  Leyendo [58/72] yellow_tripdata_2024-05_c2.parquet
+  Leyendo [59/72] yellow_tripdata_2024-06_c1.parquet
+  Leyendo [60/72] yellow_tripdata_2024-06_c2.parquet
+  Leyendo [61/72] yellow_tripdata_2024-07_c1.parquet
+  Leyendo [62/72] yellow_tripdata_2024-07_c2.parquet
+  Leyendo [63/72] yellow_tripdata_2024-08_c1.parquet
+  Leyendo [64/72] yellow_tripdata_2024-08_c2.parquet
+  Leyendo [65/72] yellow_tripdata_2024-09_c1.parquet
+  Leyendo [66/72] yellow_tripdata_2024-09_c2.parquet
+  Leyendo [67/72] yellow_tripdata_2024-10_c1.parquet
+  Leyendo [68/72] yellow_tripdata_2024-10_c2.parquet
+  Leyendo [69/72] yellow_tripdata_2024-11_c1.parquet
+  Leyendo [70/72] yellow_tripdata_2024-11_c2.parquet
+  Leyendo [71/72] yellow_tripdata_2024-12_c1.parquet
+  Leyendo [72/72] yellow_tripdata_2024-12_c2.parquet
+Filas leidas: 238,272,088
+Traceback (most recent call last):
+  File "C:\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py", line 306, in <module>
+    main()
+  File "C:\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py", line 295, in main
+    base = limpiar_transformar_unir(viajes, zonas)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\proyecto-nota3-bigdata\pandas_version\pipeline_pandas.py", line 108, in limpiar_transformar_unir
+    df = df.dropna(subset=COLUMNAS).copy()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\generic.py", line 6651, in copy
+    data = self._mgr.copy(deep=deep)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\internals\managers.py", line 766, in copy
+    res._consolidate_inplace()
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\internals\managers.py", line 1977, in _consolidate_inplace
+    self.blocks = _consolidate(self.blocks)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\internals\managers.py", line 2480, in _consolidate
+    merged_blocks, _ = _merge_blocks(
+                       ^^^^^^^^^^^^^^
+  File "C:\Users\garci\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\internals\managers.py", line 2512, in _merge_blocks
+    new_values = new_values[argsort]
+                 ~~~~~~~~~~^^^^^^^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 6.70 GiB for an array with shape (4, 224734306) and data type float64
