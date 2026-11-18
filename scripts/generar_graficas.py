@@ -156,6 +156,7 @@ def resumir(df: pd.DataFrame, filas: dict) -> pd.DataFrame:
             "tiempo_prom_s": ok["tiempo_s"].mean(),
             "tiempo_desv_s": ok["tiempo_s"].std(ddof=1) if len(ok) > 1 else np.nan,
             "tiempo_min_s": ok["tiempo_s"].min(),
+            "tiempo_fallo_s": g.loc[~g["ok"], "tiempo_s"].mean(),
             # La RAM se toma de todas las ejecuciones: en las fallidas tambien se midio el pico.
             "ram_pico_prom_mb": g["ram_pico_mb"].mean(),
             "ram_pico_max_mb": g["ram_pico_mb"].max(),
@@ -188,7 +189,7 @@ def tabla_markdown(res: pd.DataFrame) -> str:
         "|---|---|---|---|---|---|---|---|",
     ]
     for _, r in res.iterrows():
-        tiempo = f(r["tiempo_prom_s"]) if r["exitosas"] else f"Falló ({r['error']})"
+        tiempo = f(r["tiempo_prom_s"]) if r["exitosas"] else f"Falló a los {f(r['tiempo_fallo_s'], 0)} s ({error_corto(r['error'])})"
         lineas.append(
             f"| {r['porcentaje']} % | {f(r['filas'], 0)} | {r['herramienta']} | "
             f"{r['exitosas']}/{r['ejecuciones']} | {tiempo} | {f(r['tiempo_desv_s'])} | "
@@ -234,8 +235,11 @@ def marca_ejemplo(fig, ejemplo: bool) -> None:
 
 
 def grafica_por_volumen(res, filas, columna, desv, escala, eje_y, titulo, archivo, ejemplo,
-                        linea_ref=None, texto_ref=None, incluir_fallidas=False, extras=None):
-    fig, ax = plt.subplots(figsize=(7.2, 4.2))
+                        linea_ref=None, texto_ref=None, col_fallo=None, extras=None,
+                        mostrar_fallidas=True, fallo_abajo=False):
+    """Una linea por herramienta con las ejecuciones exitosas. Las fallidas se marcan con
+    una X en el valor medido al fallar (col_fallo) y una etiqueta con el motivo."""
+    fig, ax = plt.subplots(figsize=(7.2, 4.4))
     x_pos = {p: i for i, p in enumerate(PORCENTAJES)}
     techo = 0
 
@@ -243,8 +247,7 @@ def grafica_por_volumen(res, filas, columna, desv, escala, eje_y, titulo, archiv
         g = res[res["herramienta"] == herr].set_index("porcentaje")
         if g.empty:
             continue
-        validos = g[g["exitosas"] > 0] if not incluir_fallidas else g
-        validos = validos[validos[columna].notna()]
+        validos = g[(g["exitosas"] > 0) & g[columna].notna()]
         xs = [x_pos[p] for p in validos.index if p in x_pos]
         ys = [validos.loc[p, columna] * escala for p in validos.index if p in x_pos]
         err = None
@@ -258,31 +261,30 @@ def grafica_por_volumen(res, filas, columna, desv, escala, eje_y, titulo, archiv
             ax.annotate(herr, (xs[-1], ys[-1]), textcoords="offset points", xytext=(8, 0),
                         va="center", fontsize=9, color="black")
 
-        # Ejecuciones que fallaron: X roja de texto negro, nunca solo color.
-        fallidas = g[g["exitosas"] == 0]
-        for p, r in fallidas.iterrows():
-            if p not in x_pos or (incluir_fallidas and pd.notna(r[columna])):
+        # Ejecuciones que fallaron: X con etiqueta de texto (nunca solo color).
+        for p, r in g[g["exitosas"] == 0].iterrows():
+            if p not in x_pos or not mostrar_fallidas:
                 continue
-            y = (techo or 1) * 1.08
-            ax.scatter([x_pos[p]], [y], marker="x", s=90, color=COLOR[herr], linewidths=2.5, zorder=4)
-            ax.annotate(f"{herr}: falló\n({error_corto(r['error'])})", (x_pos[p], y),
-                        textcoords="offset points", xytext=(0, 10), ha="center", fontsize=8.5)
-        if incluir_fallidas:
-            for p, r in fallidas.iterrows():
-                if p in x_pos and pd.notna(r[columna]):
-                    ax.annotate(f"{herr}: falló\n({error_corto(r['error'])})", (x_pos[p], r[columna] * escala),
-                                textcoords="offset points", xytext=(0, -14), ha="center", va="top",
-                                fontsize=8.5)
+            valor = r.get(col_fallo or columna)
+            y = valor * escala if pd.notna(valor) else (techo or 1) * 1.08
+            ax.scatter([x_pos[p]], [y], marker="x", s=110, color=COLOR[herr], linewidths=2.8, zorder=5)
+            if xs:
+                ax.plot([xs[-1], x_pos[p]], [ys[-1], y], color=COLOR[herr], linestyle=":", linewidth=1.5, zorder=2)
+            momento = f" a los {r['tiempo_fallo_s']:.0f} s" if columna == "tiempo_prom_s" and pd.notna(r.get("tiempo_fallo_s")) else ""
+            ax.annotate(f"{herr}: falló{momento}\n({error_corto(r['error'])})", (x_pos[p], y),
+                        textcoords="offset points", xytext=(0, -16) if fallo_abajo else (-12, 14),
+                        ha="center" if fallo_abajo else "right", va="top" if fallo_abajo else "bottom", fontsize=8.5)
+            techo = max(techo, y)
 
-    # Puntos adicionales, ej. memoria comprometida de pandas (incluye lo paginado a disco),
+    # Puntos adicionales: memoria comprometida del sistema (incluye lo paginado a disco),
     # que la memoria residente medida con psutil no refleja.
     for herr, pct, valor, texto in (extras or []):
         if pct not in x_pos:
             continue
+        base = res[(res["herramienta"] == herr) & (res["porcentaje"] == pct)][columna].max() * escala
+        ax.plot([x_pos[pct], x_pos[pct]], [base, valor], color=COLOR[herr], linestyle=":", linewidth=1.5, zorder=2)
         ax.scatter([x_pos[pct]], [valor], marker=MARCA[herr], s=70, facecolors="white",
                    edgecolors=COLOR[herr], linewidths=2, zorder=4)
-        ax.plot([x_pos[pct], x_pos[pct]], [res[(res["herramienta"] == herr) & (res["porcentaje"] == pct)][columna].max() * escala, valor],
-                color=COLOR[herr], linestyle=":", linewidth=1.5, zorder=2)
         ax.annotate(texto, (x_pos[pct], valor), textcoords="offset points", xytext=(-10, 0),
                     ha="right", va="center", fontsize=8.5)
         techo = max(techo, valor)
@@ -400,6 +402,8 @@ def main() -> None:
     parser.add_argument("--optimizaciones", default="benchmarks/optimizaciones_p10.txt")
     parser.add_argument("--ram-total-gb", type=float, default=15.8,
                         help="RAM utilizable del equipo de prueba (linea de referencia)")
+    parser.add_argument("--comprometida", nargs="+", default=[], metavar="PCT=GB",
+                        help="Memoria comprometida del sistema durante pandas, ej. 100=27.1 200=42.5")
     parser.add_argument("--pandas-comprometida-gb", type=float, default=None,
                         help="Memoria comprometida del sistema durante pandas al 100 %% (RAM + paginacion), en GB")
     parser.add_argument("--ejemplo", action="store_true", help="Probar con datos inventados")
@@ -429,21 +433,24 @@ def main() -> None:
 
     grafica_por_volumen(res, filas, "tiempo_prom_s", "tiempo_desv_s", 1, "Tiempo de ejecución (s)",
                         "Tiempo de ejecución según el volumen de datos (promedio de 3 repeticiones)",
-                        salida / "tiempo_vs_volumen.png", args.ejemplo)
+                        salida / "tiempo_vs_volumen.png", args.ejemplo, col_fallo="tiempo_fallo_s", fallo_abajo=True)
+    comprometida = {100: args.pandas_comprometida_gb} if args.pandas_comprometida_gb else {}
+    for par in args.comprometida:
+        pct, gb = par.split("=")
+        comprometida[int(pct)] = float(gb)
+    extras = [("pandas", pct, gb, f"Memoria comprometida del sistema\ndurante pandas: {gb:g} GB".replace(".", ","))
+              for pct, gb in sorted(comprometida.items())]
     grafica_por_volumen(res, filas, "ram_pico_max_mb", None, 1 / 1024, "Memoria (GB)",
                         "Memoria RAM pico (residente) según el volumen de datos",
                         salida / "memoria_vs_volumen.png", args.ejemplo,
                         linea_ref=args.ram_total_gb,
                         texto_ref=f"RAM utilizable del equipo: {args.ram_total_gb:g} GB".replace(".", ","),
-                        incluir_fallidas=True,
-                        extras=[("pandas", 100, args.pandas_comprometida_gb,
-                                 f"Memoria comprometida del sistema durante\npandas: {args.pandas_comprometida_gb:g} GB (incluye paginación)".replace(".", ","))]
-                        if args.pandas_comprometida_gb else None)
+                        extras=extras)
     generadas = ["tiempo_vs_volumen.png", "memoria_vs_volumen.png"]
     if "cpu_prom_pct" in res and res["cpu_prom_pct"].notna().any():
         grafica_por_volumen(res, filas, "cpu_prom_pct", None, 1, "CPU promedio (%)",
                             "Uso promedio de CPU según el volumen de datos",
-                            salida / "cpu_vs_volumen.png", args.ejemplo)
+                            salida / "cpu_vs_volumen.png", args.ejemplo, mostrar_fallidas=False)
         generadas.append("cpu_vs_volumen.png")
     if grafica_aceleracion(res, filas, salida / "aceleracion_spark.png", args.ejemplo):
         generadas.append("aceleracion_spark.png")
